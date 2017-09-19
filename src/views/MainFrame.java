@@ -35,7 +35,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        resultLbl.setBackground(new java.awt.Color(255, 204, 204));
         resultLbl.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        resultLbl.setForeground(new java.awt.Color(153, 204, 255));
+        resultLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         opCBox.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         opCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "+", "*", "-", "/" }));
@@ -46,6 +49,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         goBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         goBtn.setText("Go!");
+        goBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                goBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,6 +96,50 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void goBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBtnActionPerformed
+        String xS = xText.getText(), yS = yText.getText();
+        if (xS.matches("[0-9]+") && yS.matches("[0-9]+")) {
+            int x = Integer.parseInt(xS), y = Integer.parseInt(yS);
+            switch (opCBox.getSelectedIndex()){
+                case 0:
+                    resultLbl.setText(String.valueOf(sum(x, y)));
+                    break;
+                case 1:
+                    resultLbl.setText(String.valueOf(mult(x, y)));
+                    break;
+                case 2:
+                    resultLbl.setText(String.valueOf(subs(x, y)));
+                    break;
+                case 3:
+                    resultLbl.setText(String.valueOf(sum(x, y)));
+                    break;
+            }
+        }
+    }//GEN-LAST:event_goBtnActionPerformed
+
+    int sum(int x, int y){
+        return x+y;
+    }
+    
+    int mult(int x, int y){
+        int result = 0;
+        for (int i = 0; i < y; i++)
+            result = sum(result, x);
+        return result;
+    }
+    
+    int subs(int x, int y){
+        int complement = 10, counter = 0, result, sign;
+        while(y > complement)
+            complement = mult(complement, 10);
+        for (int i = y; i < complement; i++)
+            counter++;
+        while(String.valueOf(x).length() > String.valueOf(counter).length())
+            counter = Integer.parseInt("9"+counter);        
+        result = Integer.parseInt(String.valueOf(sum(counter,x)).substring(1));
+        return result;
+    }
+    
     /**
      * @param args the command line arguments
      */
